@@ -4,3 +4,8 @@ version = "0.1.0"
 authors = ["AlexNav73 <fifthhorseman@mail.ru>"]
 
 [dependencies]
+yew = { git = "https://github.com/DenisKolodin/yew", version = "0.4.0" }
+stdweb = "0.4.5"
+
+[lib]
+path = "./src/lib.rs"
