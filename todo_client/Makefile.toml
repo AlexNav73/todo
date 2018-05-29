@@ -1,0 +1,31 @@
+#default-target = "wasm32-unknown-unknown"
+
+[tasks.compile]
+description = "Builds wasm module from rust source"
+command = "cargo"
+args = ["build", "--target", "wasm32-unknown-unknown"]
+
+[tasks.generate_bindings]
+description = "Creates ES6 module for loading wasm stuff"
+dependencies = ["compile"]
+command = "wasm-bindgen"
+args = ["--no-typescript", "../target/wasm32-unknown-unknown/debug/todo_client.wasm", "--out-dir", "./static"]
+
+[tasks.bundle]
+dependencies = ["generate_bindings"]
+command = "node"
+args = ["./node_modules/webpack/bin/webpack.js"]
+
+[tasks.copy_index_html]
+dependencies = ["bundle"]
+script_runner = "@shell"
+script = ["cp .\\static\\index.html .\\dist\\ /Y"]
+
+[tasks.run]
+dependencies = ["copy_index_html"]
+command = "node"
+args = ["./node_modules/webpack-dev-server/bin/webpack-dev-server.js"]
+
+[tasks.just-run]
+command = "node"
+args = ["./node_modules/webpack-dev-server/bin/webpack-dev-server.js"]
